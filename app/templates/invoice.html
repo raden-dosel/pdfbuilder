@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Invoice #{{ doc.document_id }}</title>
+    <link rel="stylesheet" href="styles.css" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="invoice">
+      <header class="header">
+        <div class="brand">
+          <img src="logo/logo.jpg" alt="SEIA Logo" class="logo" />
+        </div>
+
+        <div class="doc-meta">
+          <div class="meta-row">
+            <span class="label">No.</span>
+            <span class="value">#{{ doc.document_id }}</span>
+          </div>
+          <div class="meta-row">
+            <span class="label">Date</span>
+            <span class="value">{{ doc.date_issued }}</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="content">
+        <div class="parties">
+          <div class="party">
+            <div class="label">From</div>
+            <div class="name">{{ doc.sender.name }}</div>
+            <div class="address">{{ doc.sender.address }}</div>
+            <div class="contact">{{ doc.sender.contact }}</div>
+            <div class="email">{{ doc.sender.email }}</div>
+          </div>
+          <div class="party">
+            <div class="label">Bill To</div>
+            <div class="name">{{ doc.recipient.name }}</div>
+            <div class="address">{{ doc.recipient.address }}</div>
+          </div>
+        </div>
+
+        <div class="intro-message">
+          <p>Dear Sir/Maam,</p>
+          <p>
+            We are pleased to submit herewith our proposal for the {{
+            doc.project.title }}.
+          </p>
+        </div>
+
+        <div class="table-wrap">
+          <table class="items">
+            <thead>
+              <tr>
+                <th>Description</th>
+                <th class="num">Qty</th>
+                <th class="num">Unit Price (PHP)</th>
+                <th class="num">Amount (PHP)</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for item in doc['items'] %}
+              <tr>
+                <td>{{ item.description }}</td>
+                <td class="num">{{ item.quantity }}</td>
+                <td class="num">{{ "{:,.2f}".format(item.unit_price) }}</td>
+                <td class="num">{{ "{:,.2f}".format(item.amount) }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+        <div class="totals">
+          <div class="total-badge">
+            <span class="label">Total Due (PHP)</span>
+            <span class="amount">{{ "{:,.2f}".format(doc.total) }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="scope-section">
+        <div class="section-title">Scope of Work and Conditions</div>
+
+        <ul class="scope-list">
+          <li>Site design and assessment</li>
+          <li>Delivery of equipment and materials</li>
+          <li>Installation of stainless tube</li>
+          <li>Wiring of stainless wire and high voltage cable</li>
+          <li>Termination and testing</li>
+          <li>
+            Provide basic troubleshooting and system operation training to the
+            client
+          </li>
+          <li>
+            Chipping works for embedded pipe (from perimeter up to energizer
+            control)
+          </li>
+        </ul>
+
+        <div class="scope-notes">
+          <p>*Installation duration is between <strong>1–3 days</strong>.</p>
+          <p>*1-year parts and labor warranty.</p>
+        </div>
+
+        <div class="terms">
+          <span class="label">Terms of Payment:</span>
+          <span class="value">Full payment upon installation</span>
+        </div>
+      </div>
+
+      <footer class="footer">
+        <div class="tagline">SEIA &mdash; Security System Services</div>
+        <div class="note">
+          Thank you for your business. Please remit payment by the due date
+          indicated on this invoice.
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>

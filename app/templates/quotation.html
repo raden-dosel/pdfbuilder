@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Quotation #{{ doc.get('quote_number', doc.document_id) }}</title>
+		<link rel="stylesheet" href="styles.css" />
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap"
+			rel="stylesheet"
+		/>
+
+		<style>
+			.quote-title {
+				margin: 0;
+				font-family: "Archivo", sans-serif;
+				font-size: 28px;
+				font-weight: 800;
+				letter-spacing: 4px;
+				text-transform: uppercase;
+				color: var(--navy);
+				line-height: 1;
+			}
+
+			.quote-subtitle {
+				margin-top: 6px;
+				font-family: "JetBrains Mono", monospace;
+				font-size: 11px;
+				letter-spacing: 2px;
+				text-transform: uppercase;
+				color: var(--muted);
+			}
+
+			.doc-meta .meta-row strong {
+				font-weight: 700;
+			}
+
+			.summary-section {
+				display: grid;
+				grid-template-columns: minmax(0, 1fr) 280px;
+				gap: 22px;
+				align-items: start;
+				margin-bottom: 8px;
+			}
+
+			.summary-box {
+				border: 1px solid var(--line);
+				border-radius: 12px;
+				padding: 16px 18px;
+				background: linear-gradient(180deg, #ffffff 0%, #fbfcfd 100%);
+			}
+
+			.summary-heading {
+				font-family: "Archivo", sans-serif;
+				font-size: 14px;
+				font-weight: 700;
+				color: var(--navy);
+				margin: 0 0 12px 0;
+			}
+
+			.summary-table {
+				width: 100%;
+				border-collapse: collapse;
+			}
+
+			.summary-table tr + tr td {
+				padding-top: 10px;
+			}
+
+			.summary-table td {
+				font-size: 12.5px;
+				color: var(--ink);
+				vertical-align: top;
+			}
+
+			.summary-table td:last-child {
+				text-align: right;
+				font-family: "JetBrains Mono", monospace;
+				white-space: nowrap;
+			}
+
+			.summary-table .muted {
+				color: var(--muted);
+			}
+
+			.grand-total {
+				margin-top: 14px;
+				padding-top: 14px;
+				border-top: 1px solid var(--line);
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				gap: 20px;
+			}
+
+			.grand-total .label {
+				font-family: "JetBrains Mono", monospace;
+				font-size: 11px;
+				letter-spacing: 3px;
+				text-transform: uppercase;
+				color: var(--teal);
+			}
+
+			.grand-total .amount {
+				font-family: "Archivo", sans-serif;
+				font-size: 24px;
+				font-weight: 800;
+				color: var(--navy);
+			}
+
+			.conditions-grid {
+				display: grid;
+				grid-template-columns: repeat(2, minmax(0, 1fr));
+				gap: 12px 24px;
+				margin-top: 6px;
+			}
+
+			.condition-card {
+				padding: 12px 14px;
+				border: 1px solid var(--line);
+				border-radius: 10px;
+				background: #ffffff;
+			}
+
+			.condition-card .card-label {
+				display: block;
+				font-family: "JetBrains Mono", monospace;
+				font-size: 10px;
+				letter-spacing: 2px;
+				text-transform: uppercase;
+				color: var(--muted);
+				margin-bottom: 6px;
+			}
+
+			.condition-card .card-value {
+				margin: 0;
+				font-size: 12.5px;
+				line-height: 1.6;
+				color: var(--ink);
+			}
+
+			.scope-section .section-title.alt {
+				margin-bottom: 8px;
+			}
+
+			@media (max-width: 820px) {
+				.summary-section {
+					grid-template-columns: 1fr;
+				}
+
+				.conditions-grid {
+					grid-template-columns: 1fr;
+				}
+			}
+
+			@media print {
+				@page {
+					size: A4;
+					margin: 10mm;
+				}
+
+				body {
+					padding: 0;
+					background: #ffffff;
+				}
+
+				.invoice {
+					max-width: none;
+					min-height: auto;
+					box-shadow: none;
+					border-radius: 0;
+				}
+
+				.summary-box,
+				.condition-card {
+					break-inside: avoid;
+					page-break-inside: avoid;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		{% set subtotal = doc.subtotal or 0 %}
+		{% set tax_amount = doc.tax or 0 %}
+		{% set discount_amount = doc.get('discount', 0) or 0 %}
+		{% set grand_total = doc.total or 0 %}
+		{% set tax_rate = ((tax_amount / subtotal) * 100) if subtotal else 0 %}
+		{% set valid_until = doc.get('valid_until', '14 days from issue date') %}
+		{% set prepared_by = doc.get('prepared_by', doc.sender.contact) %}
+
+		<div class="invoice">
+			<header class="header">
+				<div class="brand">
+					<img src="logo/logo.jpg" alt="SEIA Logo" class="logo" />
+				</div>
+
+				<div class="doc-meta">
+					<h1 class="quote-title">Quotation</h1>
+					<div class="quote-subtitle">Price Quote</div>
+					<div class="meta-row">
+						<span class="label">Quote No.</span>
+						<span class="value">#{{ doc.get('quote_number', doc.document_id) }}</span>
+					</div>
+					<div class="meta-row">
+						<span class="label">Quotation Date</span>
+						<span class="value">{{ doc.date_issued }}</span>
+					</div>
+					<div class="meta-row">
+						<span class="label">Valid Until</span>
+						<span class="value">{{ valid_until }}</span>
+					</div>
+					<div class="meta-row">
+						<span class="label">Prepared By</span>
+						<span class="value">{{ prepared_by }}</span>
+					</div>
+				</div>
+			</header>
+
+			<div class="content">
+				<div class="parties">
+					<div class="party">
+						<div class="label">From</div>
+						<div class="name">{{ doc.sender.name }}</div>
+						<div class="address">{{ doc.sender.address }}</div>
+						<div class="contact">{{ doc.sender.contact }}</div>
+						<div class="email">{{ doc.sender.email }}</div>
+					</div>
+					<div class="party">
+						<div class="label">Quotation For</div>
+						<div class="name">{{ doc.recipient.name }}</div>
+						<div class="address">{{ doc.recipient.address }}</div>
+						{% if doc.get('recipient_contact') %}
+						<div class="contact">{{ doc.get('recipient_contact') }}</div>
+						{% endif %}
+						{% if doc.get('recipient_email') %}
+						<div class="email">{{ doc.get('recipient_email') }}</div>
+						{% endif %}
+					</div>
+				</div>
+
+				<div class="intro-message">
+					<p>Dear Sir/Ma'am,</p>
+					<p>
+						We are pleased to submit this formal quotation for the {{ doc.project.title }}.
+					</p>
+				</div>
+
+				<div class="table-wrap">
+					<table class="items">
+						<thead>
+							<tr>
+								<th class="num">#</th>
+								<th>Item Description</th>
+								<th class="num">Qty</th>
+								<th class="num">Unit Price (PHP)</th>
+								<th class="num">Total Amount (PHP)</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for item in doc['items'] %}
+							<tr>
+								<td class="num">{{ loop.index }}</td>
+								<td>{{ item.description }}</td>
+								<td class="num">{{ item.quantity }}</td>
+								<td class="num">{{ "{:,.2f}".format(item.unit_price) }}</td>
+								<td class="num">{{ "{:,.2f}".format(item.amount) }}</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+
+				<div class="summary-section">
+					<div class="scope-section" style="border-top: none; padding-top: 0; margin-top: 0;">
+						<div class="section-title alt">Scope of Work and Conditions</div>
+						<ul class="scope-list">
+							<li>Site design and assessment</li>
+							<li>Delivery of equipment and materials</li>
+							<li>Installation of stainless tube</li>
+							<li>Wiring of stainless wire and high voltage cable</li>
+							<li>Termination and testing</li>
+							<li>
+								Provide basic troubleshooting and system operation training to the client
+							</li>
+							<li>
+								Chipping works for embedded pipe (from perimeter up to energizer control)
+							</li>
+						</ul>
+
+						<div class="scope-notes">
+							<p>*Quotation validity is limited to the indicated validity period.</p>
+							<p>*Lead times are subject to material availability and site readiness.</p>
+						</div>
+					</div>
+
+					<div class="summary-box">
+						<div class="summary-heading">Summary</div>
+						<table class="summary-table" aria-label="Quotation summary">
+							<tr>
+								<td class="muted">Subtotal</td>
+								<td>{{ "{:,.2f}".format(subtotal) }}</td>
+							</tr>
+							<tr>
+								<td class="muted">Tax / VAT ({{ "{:.0f}".format(tax_rate) }}%)</td>
+								<td>{{ "{:,.2f}".format(tax_amount) }}</td>
+							</tr>
+							<tr>
+								<td class="muted">Discounts</td>
+								<td>-{{ "{:,.2f}".format(discount_amount) }}</td>
+							</tr>
+						</table>
+
+						<div class="grand-total">
+							<span class="label">Grand Total (PHP)</span>
+							<span class="amount">{{ "{:,.2f}".format(grand_total) }}</span>
+						</div>
+					</div>
+				</div>
+
+				<div class="scope-section">
+					<div class="section-title">Terms &amp; Conditions</div>
+					<div class="conditions-grid">
+						<div class="condition-card">
+							<span class="card-label">Payment Terms</span>
+							<p class="card-value">Full payment upon installation unless otherwise agreed in writing.</p>
+						</div>
+						<div class="condition-card">
+							<span class="card-label">Validity Period</span>
+							<p class="card-value">This quotation is valid until {{ valid_until }}.</p>
+						</div>
+						<div class="condition-card">
+							<span class="card-label">Lead Time</span>
+							<p class="card-value">Delivery and installation schedules are confirmed after purchase approval and site coordination.</p>
+						</div>
+						<div class="condition-card">
+							<span class="card-label">Warranty</span>
+							<p class="card-value">1-year parts and labor warranty, subject to normal operating conditions.</p>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<footer class="footer">
+				<div class="tagline">SEIA &mdash; Security System Services</div>
+				<div class="note">
+					Thank you for the opportunity to submit our quotation. Please contact us for any clarifications or adjustments.
+				</div>
+			</footer>
+		</div>
+	</body>
+</html>

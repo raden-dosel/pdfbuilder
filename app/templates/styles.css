@@ -1,0 +1,372 @@
+:root {
+  --navy: #071d32;
+  --navy-soft: #0f2d4a;
+  --cyan: #2ec4db;
+  --teal: #1d839a;
+  --ink: #1c2b3a;
+  --muted: #6b7c8d;
+  --line: #e3e8ee;
+  --paper: #ffffff;
+  --canvas: #eef2f6;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Inter", Helvetica, Arial, sans-serif;
+  background: var(--canvas);
+  color: var(--ink);
+  margin: 0;
+  padding: 48px 20px;
+}
+
+.invoice {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  max-width: 840px;
+  margin: 0 auto;
+  background: var(--paper);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 24px 60px -28px rgba(7, 29, 50, 0.35);
+}
+
+/* Minimalist & Compact Header */
+
+.header {
+  padding: 14px 32px; /* tighter */
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  border-bottom: 1px solid var(--line);
+}
+
+.brand img {
+  display: block;
+  height: 100px; /* Slimmed down from 70px to keep aspect ratio tight */
+  width: auto;
+}
+
+/* Body */
+.content {
+  padding: 24px 40px 4px;
+  flex: 1;
+}
+
+.doc-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
+}
+
+.doc-meta .meta-row {
+  display: flex;
+  justify-content: flex-start;
+  gap: 10px;
+  font-size: 12.5px;
+}
+
+.doc-meta .label {
+  font-family: "JetBrains Mono", monospace;
+  color: var(--muted);
+  letter-spacing: 1px;
+}
+
+.doc-meta .value {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.parties {
+  display: flex;
+  gap: 48px;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--line);
+}
+
+.parties .party {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.party .label {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 10px;
+}
+
+.party .name {
+  font-family: "Archivo", sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+
+.party .address,
+.party .contact,
+.party .email {
+  font-size: 13.5px;
+  line-height: 1.7;
+  color: var(--muted);
+  white-space: pre-line;
+}
+
+.intro-message {
+  margin-bottom: 20px;
+}
+
+.intro-message p {
+  font-family: "Inter", sans-serif;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--ink);
+  margin: 0 0 12px 0; /* Adds crisp breathing room between paragraphs */
+}
+
+/* Target only the paragraphs that come AFTER the first paragraph (p.1) */
+.intro-message p ~ p {
+  text-indent: 36px; /* Indents the first line of subsequent paragraphs */
+  /* Alternative: If you want the ENTIRE paragraph block shifted right, use: padding-left: 36px; */
+}
+
+.intro-message p:last-child {
+  margin-bottom: 0;
+}
+
+/* Items table */
+.table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  margin-bottom: 24px;
+}
+
+table.items {
+  width: 100%;
+  min-width: 520px;
+  border-collapse: collapse;
+}
+
+table.items thead th {
+  background: var(--navy);
+  color: #ffffff;
+  font-family: "JetBrains Mono", monospace;
+  font-weight: 500;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-align: left;
+  padding: 10px 12px;
+}
+
+table.items th.num,
+table.items td.num {
+  text-align: right;
+}
+
+table.items tbody td {
+  padding: 10px 12px;
+  font-size: 11px;
+  color: var(--ink);
+  border-bottom: 1px solid var(--line);
+}
+
+table.items tbody td.num {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+}
+
+table.items tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Totals */
+.totals {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 8px;
+}
+
+.total-badge {
+  background: var(--navy);
+  color: #ffffff;
+  padding: 14px 22px;
+  min-width: 200px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  clip-path: polygon(0 0, calc(100% - 24px) 0, 100% 24px, 100% 100%, 0 100%);
+}
+
+.total-badge .label {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--cyan);
+}
+
+.total-badge .amount {
+  font-family: "Archivo", sans-serif;
+  font-weight: 800;
+  font-size: 22px;
+}
+
+/* Scope of Work Section */
+.scope-section {
+  border-top: 1px solid var(--line);
+  padding-top: 20px;
+  margin-top: 20px;
+}
+
+/* Section Title */
+.scope-section .section-title {
+  font-family: "Archivo", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 12px;
+}
+
+/* Ordered List */
+.scope-list {
+  margin: 0 0 10px 18px;
+  padding: 0;
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--ink);
+  list-style: none;
+}
+
+.scope-list li {
+  margin-bottom: 4px;
+}
+
+.scope-list li::before {
+  content: "•";
+  color: var(--navy);
+  margin-right: 8px;
+}
+
+/* Notes (asterisk items) */
+.scope-notes {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 8px;
+}
+
+.scope-notes p {
+  margin: 2px 0;
+}
+
+/* Terms of Payment */
+.terms {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--line);
+  display: flex;
+  gap: 8px;
+  font-size: 12.5px;
+}
+
+.terms .label {
+  font-family: "JetBrains Mono", monospace;
+  color: var(--muted);
+}
+
+.terms .value {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 18px 40px 28px;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.footer .tagline {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 10px;
+}
+
+.footer .note {
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 28px 24px;
+  }
+  .heading {
+    text-align: left;
+  }
+  .meta-bar {
+    flex-direction: column;
+  }
+  .meta-item.right {
+    text-align: left;
+  }
+  .parties {
+    flex-direction: column;
+    gap: 24px;
+  }
+  .content {
+    padding: 32px 24px 8px;
+  }
+  .footer {
+    padding: 24px 24px 32px;
+  }
+  .total-badge {
+    width: 100%;
+  }
+}
+
+/* Print */
+@media print {
+  body {
+    background: #ffffff;
+    padding: 0;
+    height: 100%;
+  }
+  .invoice {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    box-shadow: none;
+    border-radius: 0;
+    max-width: 100%;
+  }
+
+  .content {
+    flex: 1;
+  }
+
+  .footer {
+    margin-top: auto;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+}
