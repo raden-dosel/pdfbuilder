@@ -17,12 +17,12 @@ body {
   background: var(--canvas);
   color: var(--ink);
   margin: 0;
-  padding: 56px 20px;
+  padding: 28px 16px;
   -webkit-font-smoothing: antialiased;
 }
 
 .invoice {
-  max-width: 720px;
+  max-width: 680px;
   margin: 0 auto;
   background: var(--paper);
 }
@@ -33,14 +33,14 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  gap: 24px;
-  padding-bottom: 28px;
-  border-bottom: 2px solid var(--navy);
+  gap: 16px;
+  padding-bottom: 14px;
+  border-bottom: 1.5px solid var(--navy);
 }
 
 .brand img {
   display: block;
-  height: 56px;
+  height: 38px;
   width: auto;
 }
 
@@ -68,21 +68,21 @@ body {
 .doc-meta .value {
   font-family: "Archivo", sans-serif;
   font-weight: 700;
-  font-size: 14px;
+  font-size: 12px;
   color: var(--ink);
 }
 
 /* ---------- Body ---------- */
 
 .content {
-  padding: 36px 0 4px;
+  padding: 18px 0 2px;
 }
 
 .parties {
   display: flex;
-  gap: 48px;
-  padding-bottom: 32px;
-  margin-bottom: 32px;
+  gap: 28px;
+  padding-bottom: 14px;
+  margin-bottom: 14px;
   border-bottom: 1px solid var(--line);
 }
 
@@ -98,35 +98,35 @@ body {
   letter-spacing: 2px;
   text-transform: uppercase;
   color: var(--cyan);
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 }
 
 .party .name {
   font-family: "Archivo", sans-serif;
   font-weight: 700;
-  font-size: 16px;
+  font-size: 13.5px;
   color: var(--ink);
-  margin-bottom: 6px;
+  margin-bottom: 3px;
 }
 
 .party .address,
 .party .contact,
 .party .email {
-  font-size: 13px;
-  line-height: 1.7;
+  font-size: 11.5px;
+  line-height: 1.5;
   color: var(--muted);
   white-space: pre-line;
 }
 
 .intro-message {
-  margin-bottom: 32px;
+  margin-bottom: 14px;
 }
 
 .intro-message p {
-  font-size: 13.5px;
-  line-height: 1.7;
+  font-size: 12px;
+  line-height: 1.5;
   color: var(--ink);
-  margin: 0 0 12px 0;
+  margin: 0 0 6px 0;
 }
 
 .intro-message p:last-child {
@@ -138,7 +138,7 @@ body {
 .table-wrap {
   width: 100%;
   overflow-x: auto;
-  margin-bottom: 28px;
+  margin-bottom: 12px;
 }
 
 table.items {
@@ -155,7 +155,7 @@ table.items thead th {
   letter-spacing: 2px;
   text-transform: uppercase;
   color: var(--muted);
-  padding: 0 0 10px;
+  padding: 0 0 5px;
   border-bottom: 1.5px solid var(--ink);
 }
 
@@ -165,38 +165,38 @@ table.items td.center {
 }
 
 table.items tbody td {
-  padding: 10px 0;
-  font-size: 13px;
+  padding: 5px 0;
+  font-size: 11.5px;
   color: var(--ink);
   border-bottom: 1px solid var(--line);
 }
 
 table.items tbody td.center {
   font-family: "JetBrains Mono", monospace;
-  font-size: 12.5px;
+  font-size: 11px;
   color: var(--muted);
 }
 
 /* Section eyebrow rows — a quiet label + rule, not a boxed band */
 .section-header-row td {
-  padding: 22px 0 8px;
+  padding: 10px 0 4px;
   border-bottom: none;
   font-family: "JetBrains Mono", monospace;
   font-weight: 700;
-  font-size: 10.5px;
-  letter-spacing: 2.5px;
+  font-size: 10px;
+  letter-spacing: 2px;
   color: var(--navy);
 }
 
 .section-header-row:first-child td {
-  padding-top: 14px;
+  padding-top: 6px;
 }
 
 /* Subtotal rows — understated, right-set */
 .section-subtotal-row td {
-  padding: 10px 0 4px;
+  padding: 4px 0 2px;
   border-bottom: none;
-  font-size: 12.5px;
+  font-size: 11px;
 }
 
 .section-subtotal-row .subtotal-label {
@@ -217,14 +217,14 @@ table.items tbody td.center {
 .totals {
   display: flex;
   justify-content: flex-end;
-  margin-bottom: 4px;
+  margin-bottom: 2px;
 }
 
 .total-badge {
   text-align: right;
-  padding-top: 14px;
-  border-top: 2px solid var(--navy);
-  min-width: 240px;
+  padding-top: 6px;
+  border-top: 1.5px solid var(--navy);
+  min-width: 180px;
 }
 
 .total-badge .label {
@@ -234,14 +234,14 @@ table.items tbody td.center {
   letter-spacing: 1.5px;
   text-transform: uppercase;
   color: var(--muted);
-  margin-bottom: 6px;
+  margin-bottom: 2px;
 }
 
 .total-badge .amount {
   display: block;
   font-family: "Archivo", sans-serif;
   font-weight: 800;
-  font-size: 24px;
+  font-size: 18px;
   color: var(--navy);
 }
 
@@ -249,48 +249,48 @@ table.items tbody td.center {
 
 .scope-section {
   border-top: 1px solid var(--line);
-  padding-top: 28px;
-  margin-top: 36px;
+  padding-top: 12px;
+  margin-top: 14px;
 }
 
 .scope-section .section-title {
   font-family: "Archivo", sans-serif;
-  font-size: 13px;
+  font-size: 11.5px;
   font-weight: 700;
   letter-spacing: 0.3px;
   color: var(--navy);
-  margin-bottom: 14px;
+  margin-bottom: 6px;
 }
 
 .scope-list {
-  margin: 0 0 16px;
+  margin: 0 0 8px;
   padding: 0;
-  font-size: 12.5px;
-  line-height: 1.75;
+  font-size: 11px;
+  line-height: 1.5;
   color: var(--ink);
   list-style: none;
 }
 
 .scope-list li {
   position: relative;
-  padding-left: 16px;
+  padding-left: 13px;
 }
 
 .scope-list li::before {
   content: "";
   position: absolute;
   left: 0;
-  top: 9px;
-  width: 4px;
-  height: 4px;
+  top: 7px;
+  width: 3.5px;
+  height: 3.5px;
   border-radius: 50%;
   background: var(--cyan);
 }
 
 .scope-notes {
-  font-size: 11.5px;
+  font-size: 10.5px;
   color: var(--muted);
-  margin-top: 4px;
+  margin-top: 2px;
 }
 
 .scope-notes p {
@@ -298,10 +298,10 @@ table.items tbody td.center {
 }
 
 .terms {
-  margin-top: 18px;
-  padding-top: 14px;
+  margin-top: 8px;
+  padding-top: 8px;
   border-top: 1px dashed var(--line);
-  font-size: 12.5px;
+  font-size: 11px;
 }
 
 .terms .label {
@@ -319,20 +319,20 @@ table.items tbody td.center {
 
 .footer {
   text-align: center;
-  padding: 40px 0 8px;
+  padding: 18px 0 4px;
 }
 
 .footer .tagline {
   font-family: "JetBrains Mono", monospace;
   font-size: 10px;
-  letter-spacing: 4px;
+  letter-spacing: 3px;
   text-transform: uppercase;
   color: var(--navy);
-  margin-bottom: 8px;
+  margin-bottom: 4px;
 }
 
 .footer .note {
-  font-size: 11.5px;
+  font-size: 10.5px;
   color: var(--muted);
 }
 
@@ -340,12 +340,12 @@ table.items tbody td.center {
 
 @media (max-width: 640px) {
   body {
-    padding: 28px 16px;
+    padding: 16px 12px;
   }
   .header {
     flex-direction: column;
     align-items: flex-start;
-    gap: 20px;
+    gap: 10px;
   }
   .doc-meta {
     text-align: left;
@@ -356,7 +356,7 @@ table.items tbody td.center {
   }
   .parties {
     flex-direction: column;
-    gap: 24px;
+    gap: 12px;
   }
   .total-badge {
     width: 100%;
