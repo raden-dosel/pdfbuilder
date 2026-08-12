@@ -11,7 +11,6 @@ class CompanyInfo(BaseModel):
 
 class LineItem(BaseModel):
     description: str
-    amount: float = Field(ge=0)
     quantity: Optional[str] = Field(
         default=None, 
         pattern=r'^[a-zA-Z0-9\s\-\/]*$', 

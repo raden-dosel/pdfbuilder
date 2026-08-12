@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
   </head>
@@ -56,89 +56,83 @@
           </p>
         </div>
 
-        <!-- UPDATED ITEMS TABLE -->
         <div class="table-wrap">
-  <table class="items">
-    <thead>
-      <tr>
-        <th>Description</th>
-        <th class="center">Qty</th>
-        <th class="num">Amount (PHP)</th>
-      </tr>
-    </thead>
-    <tbody>
-      <!-- SECTION 1: MAIN MATERIALS -->
-      <tr class="section-header-row">
-        <td colspan="3">MAIN MATERIALS</td>
-      </tr>
-      {% for item in doc.main_materials %}
-      <tr>
-        <td>{{ item.description }}</td>
-        <td class="center">{{ item.quantity if item.quantity else '-' }}</td>
-        <td class="num">{{ "{:,.2f}".format(item.amount) }}</td>
-      </tr>
-      {% endfor %}
-      <tr class="section-subtotal-row">
-        <td colspan="2" class="subtotal-label">Subtotal — Main Materials</td>
-        <td class="num">PHP {{ "{:,.2f}".format(doc.main_materials_total) }}</td>
-      </tr>
+          <table class="items">
+            <thead>
+              <tr>
+                <th>Description</th>
+                <th class="center">Qty</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- SECTION 1: MAIN MATERIALS -->
+              <tr class="section-header-row">
+                <td colspan="2">Main Materials</td>
+              </tr>
+              {% for item in doc.main_materials %}
+              <tr>
+                <td>{{ item.description }}</td>
+                <td class="center">{{ item.quantity if item.quantity else '—' }}</td>
+              </tr>
+              {% endfor %}
+              <tr class="section-subtotal-row">
+                <td class="subtotal-label">Subtotal — Main Materials</td>
+                <td class="num">PHP {{ "{:,.2f}".format(doc.main_materials_total) }}</td>
+              </tr>
 
-      <!-- SECTION 2: LABOR & OTHER MATERIALS -->
-      <tr class="section-header-row">
-        <td colspan="3">LABOR & OTHER MATERIALS</td>
-      </tr>
-      {% for item in doc.labor_and_other %}
-      <tr>
-        <td>{{ item.description }}</td>
-        <td class="center">{{ item.quantity if item.quantity else '-' }}</td>
-        <td class="num">{{ "{:,.2f}".format(item.amount) }}</td>
-      </tr>
-      {% endfor %}
-      <tr class="section-subtotal-row">
-        <td colspan="2" class="subtotal-label">Subtotal — Labor & Other Materials</td>
-        <td class="num">PHP {{ "{:,.2f}".format(doc.labor_other_total) }}</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-
-<!-- TOTAL DUE BADGE -->
-<div class="totals">
-  <div class="total-badge">
-    <span class="label">Total Amount Due (PHP)</span>
-    <span class="amount">{{ "{:,.2f}".format(doc.total) }}</span>
-  </div>
-</div>
-
-        
-
-      <div class="scope-section">
-        <div class="section-title">Scope of Work and Conditions</div>
-
-        <ul class="scope-list">
-          <li>Site design and assessment</li>
-          <li>Delivery of equipment and materials</li>
-          <li>Installation of stainless tube</li>
-          <li>Wiring of stainless wire and high voltage cable</li>
-          <li>Termination and testing</li>
-          <li>
-            Provide basic troubleshooting and system operation training to the
-            client
-          </li>
-          <li>
-            Chipping works for embedded pipe (from perimeter up to energizer
-            control)
-          </li>
-        </ul>
-
-        <div class="scope-notes">
-          <p>*Installation duration is between <strong>1–3 days</strong>.</p>
-          <p>*1-year parts and labor warranty.</p>
+              <!-- SECTION 2: LABOR & OTHER MATERIALS -->
+              <tr class="section-header-row">
+                <td colspan="2">Labor & Other Materials</td>
+              </tr>
+              {% for item in doc.labor_and_other %}
+              <tr>
+                <td>{{ item.description }}</td>
+                <td class="center">{{ item.quantity if item.quantity else '—' }}</td>
+              </tr>
+              {% endfor %}
+              <tr class="section-subtotal-row">
+                <td class="subtotal-label">Subtotal — Labor & Other Materials</td>
+                <td class="num">PHP {{ "{:,.2f}".format(doc.labor_other_total) }}</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
 
-        <div class="terms">
-          <span class="label">Terms of Payment:</span>
-          <span class="value">Full payment upon installation</span>
+        <div class="totals">
+          <div class="total-badge">
+            <span class="label">Total Amount Due (PHP)</span>
+            <span class="amount">{{ "{:,.2f}".format(doc.total) }}</span>
+          </div>
+        </div>
+
+        <div class="scope-section">
+          <div class="section-title">Scope of Work and Conditions</div>
+
+          <ul class="scope-list">
+            <li>Site design and assessment</li>
+            <li>Delivery of equipment and materials</li>
+            <li>Installation of stainless tube</li>
+            <li>Wiring of stainless wire and high voltage cable</li>
+            <li>Termination and testing</li>
+            <li>
+              Provide basic troubleshooting and system operation training to
+              the client
+            </li>
+            <li>
+              Chipping works for embedded pipe (from perimeter up to
+              energizer control)
+            </li>
+          </ul>
+
+          <div class="scope-notes">
+            <p>*Installation duration is between <strong>1–3 days</strong>.</p>
+            <p>*1-year parts and labor warranty.</p>
+          </div>
+
+          <div class="terms">
+            <span class="label">Terms of Payment:</span>
+            <span class="value">Full payment upon installation</span>
+          </div>
         </div>
       </div>
 
