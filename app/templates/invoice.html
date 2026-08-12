@@ -49,37 +49,52 @@
         </div>
 
         <div class="intro-message">
-          <p>Dear Sir/Maam,</p>
+          <p>Dear Sir/Ma'am,</p>
           <p>
             We are pleased to submit herewith our proposal for the {{
             doc.project.title }}.
           </p>
         </div>
 
+        <!-- UPDATED ITEMS TABLE -->
         <div class="table-wrap">
           <table class="items">
             <thead>
               <tr>
                 <th>Description</th>
-                <th class="num">Qty</th>
-                <th class="num">Unit Price (PHP)</th>
-                <th class="num">Amount (PHP)</th>
+                <th>Labor / Other Qty</th>
+                <th class="num">Main Materials (PHP)</th>
+                <th class="num">Labor & Other (PHP)</th>
+                <th class="num">Subtotal (PHP)</th>
               </tr>
             </thead>
             <tbody>
               {% for item in doc['items'] %}
+              {% set item_subtotal = item.main_materials_cost + item.labor_other_cost %}
               <tr>
                 <td>{{ item.description }}</td>
-                <td class="num">{{ item.quantity }}</td>
-                <td class="num">{{ "{:,.2f}".format(item.unit_price) }}</td>
-                <td class="num">{{ "{:,.2f}".format(item.amount) }}</td>
+                <td>{{ item.labor_other_qty if item.labor_other_qty else '-' }}</td>
+                <td class="num">{{ "{:,.2f}".format(item.main_materials_cost) }}</td>
+                <td class="num">{{ "{:,.2f}".format(item.labor_other_cost) }}</td>
+                <td class="num">{{ "{:,.2f}".format(item_subtotal) }}</td>
               </tr>
               {% endfor %}
             </tbody>
           </table>
         </div>
 
+        <!-- UPDATED TOTALS SECTION -->
         <div class="totals">
+          <div class="totals-summary">
+            <div class="summary-row">
+              <span class="label">Total Main Materials:</span>
+              <span class="value">PHP {{ "{:,.2f}".format(doc.main_materials_total) }}</span>
+            </div>
+            <div class="summary-row">
+              <span class="label">Total Labor & Other Materials:</span>
+              <span class="value">PHP {{ "{:,.2f}".format(doc.labor_other_total) }}</span>
+            </div>
+          </div>
           <div class="total-badge">
             <span class="label">Total Due (PHP)</span>
             <span class="amount">{{ "{:,.2f}".format(doc.total) }}</span>

@@ -194,8 +194,14 @@ table.items tbody tr:last-child td {
 /* Totals */
 .totals {
   display: flex;
-  justify-content: flex-end;
-  margin-bottom: 8px;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-top: 1.5rem;
+}
+
+.totals-summary {
+  width: 300px;
+  margin-bottom: 0.75rem;
 }
 
 .total-badge {
@@ -222,6 +228,19 @@ table.items tbody tr:last-child td {
   font-family: "Archivo", sans-serif;
   font-weight: 800;
   font-size: 22px;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.25rem 0;
+  font-size: 0.9rem;
+  color: #475569;
+}
+
+.summary-row .value {
+  font-weight: 600;
+  color: #0f172a;
 }
 
 /* Scope of Work Section */
