@@ -11,13 +11,11 @@ class CompanyInfo(BaseModel):
 
 class LineItem(BaseModel):
     description: str
-    main_materials_cost: float = Field(default=0.0, ge=0)
-    labor_other_cost: float = Field(default=0.0, ge=0)
-    # Optional alphanumeric quantity for labor/other materials
-    labor_other_qty: Optional[str] = Field(
+    amount: float = Field(ge=0)
+    quantity: Optional[str] = Field(
         default=None, 
         pattern=r'^[a-zA-Z0-9\s\-\/]*$', 
-        description="Optional alphanumeric quantity e.g. '2 Workers / 3 Days'"
+        description="Optional alphanumeric quantity e.g. '1 Lot' or '3 Workers / 2 Days'"
     )
 
 class ProjectInfo(BaseModel):
@@ -29,7 +27,10 @@ class DocumentPayload(BaseModel):
     sender: CompanyInfo
     recipient: CompanyInfo
     project: ProjectInfo
-    items: List[LineItem]
+    
+    # Categorized line items (Stacked sections)
+    main_materials: List[LineItem] = []
+    labor_and_other: List[LineItem] = []
     
     # Category Totals & Grand Total
     main_materials_total: float = Field(default=0.0, ge=0)

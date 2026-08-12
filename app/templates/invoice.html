@@ -58,49 +58,59 @@
 
         <!-- UPDATED ITEMS TABLE -->
         <div class="table-wrap">
-          <table class="items">
-            <thead>
-              <tr>
-                <th>Description</th>
-                <th>Labor / Other Qty</th>
-                <th class="num">Main Materials (PHP)</th>
-                <th class="num">Labor & Other (PHP)</th>
-                <th class="num">Subtotal (PHP)</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for item in doc['items'] %}
-              {% set item_subtotal = item.main_materials_cost + item.labor_other_cost %}
-              <tr>
-                <td>{{ item.description }}</td>
-                <td>{{ item.labor_other_qty if item.labor_other_qty else '-' }}</td>
-                <td class="num">{{ "{:,.2f}".format(item.main_materials_cost) }}</td>
-                <td class="num">{{ "{:,.2f}".format(item.labor_other_cost) }}</td>
-                <td class="num">{{ "{:,.2f}".format(item_subtotal) }}</td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
+  <table class="items">
+    <thead>
+      <tr>
+        <th>Description</th>
+        <th class="center">Qty</th>
+        <th class="num">Amount (PHP)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- SECTION 1: MAIN MATERIALS -->
+      <tr class="section-header-row">
+        <td colspan="3">MAIN MATERIALS</td>
+      </tr>
+      {% for item in doc.main_materials %}
+      <tr>
+        <td>{{ item.description }}</td>
+        <td class="center">{{ item.quantity if item.quantity else '-' }}</td>
+        <td class="num">{{ "{:,.2f}".format(item.amount) }}</td>
+      </tr>
+      {% endfor %}
+      <tr class="section-subtotal-row">
+        <td colspan="2" class="subtotal-label">Subtotal — Main Materials</td>
+        <td class="num">PHP {{ "{:,.2f}".format(doc.main_materials_total) }}</td>
+      </tr>
 
-        <!-- UPDATED TOTALS SECTION -->
-        <div class="totals">
-          <div class="totals-summary">
-            <div class="summary-row">
-              <span class="label">Total Main Materials:</span>
-              <span class="value">PHP {{ "{:,.2f}".format(doc.main_materials_total) }}</span>
-            </div>
-            <div class="summary-row">
-              <span class="label">Total Labor & Other Materials:</span>
-              <span class="value">PHP {{ "{:,.2f}".format(doc.labor_other_total) }}</span>
-            </div>
-          </div>
-          <div class="total-badge">
-            <span class="label">Total Due (PHP)</span>
-            <span class="amount">{{ "{:,.2f}".format(doc.total) }}</span>
-          </div>
-        </div>
-      </div>
+      <!-- SECTION 2: LABOR & OTHER MATERIALS -->
+      <tr class="section-header-row">
+        <td colspan="3">LABOR & OTHER MATERIALS</td>
+      </tr>
+      {% for item in doc.labor_and_other %}
+      <tr>
+        <td>{{ item.description }}</td>
+        <td class="center">{{ item.quantity if item.quantity else '-' }}</td>
+        <td class="num">{{ "{:,.2f}".format(item.amount) }}</td>
+      </tr>
+      {% endfor %}
+      <tr class="section-subtotal-row">
+        <td colspan="2" class="subtotal-label">Subtotal — Labor & Other Materials</td>
+        <td class="num">PHP {{ "{:,.2f}".format(doc.labor_other_total) }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- TOTAL DUE BADGE -->
+<div class="totals">
+  <div class="total-badge">
+    <span class="label">Total Amount Due (PHP)</span>
+    <span class="amount">{{ "{:,.2f}".format(doc.total) }}</span>
+  </div>
+</div>
+
+        
 
       <div class="scope-section">
         <div class="section-title">Scope of Work and Conditions</div>
