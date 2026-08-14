@@ -4,70 +4,98 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Invoice #{{ doc.document_id }}</title>
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="/styles.css" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
   </head>
   <body>
     <div class="invoice">
+      <!-- HEADER: Brand + Prominent Document Title & Metadata -->
       <header class="header">
         <div class="brand">
-          <img src="logo/official_SEIA_LOGO.svg" alt="SEIA Logo" class="logo" />
+          <img src="/logo/official_SEIA_LOGO.svg" alt="SEIA Logo" class="logo" />
+          <span class="company-sub">Security System Services</span>
         </div>
 
         <div class="doc-meta">
-          <div class="meta-row">
-            <span class="label">No.</span>
-            <span class="value">#{{ doc.document_id }}</span>
+          <div class="doc-title-wrap">
+            <h1 class="doc-type-title">Invoice</h1>
+            <div class="doc-type-subtitle">Commercial Invoice</div>
           </div>
-          <div class="meta-row">
-            <span class="label">Date</span>
-            <span class="value">{{ doc.date_issued }}</span>
+          <div class="meta-grid">
+            <div class="meta-row">
+              <span class="label">Invoice No:</span>
+              <span class="value">#{{ doc.document_id }}</span>
+            </div>
+            <div class="meta-row">
+              <span class="label">Issue Date:</span>
+              <span class="value">{{ doc.date_issued }}</span>
+            </div>
+            <div class="meta-row">
+              <span class="label">Payment Terms:</span>
+              <span class="value">Due Upon Installation</span>
+            </div>
           </div>
         </div>
       </header>
 
       <div class="content">
+        <!-- PARTIES: Sender & Client -->
         <div class="parties">
           <div class="party">
-            <div class="label">From</div>
+            <div class="party-header">
+              <span class="label">Issued By</span>
+            </div>
             <div class="name">{{ doc.sender.name }}</div>
             <div class="address">{{ doc.sender.address }}</div>
-            <div class="contact">{{ doc.sender.contact }}</div>
-            <div class="email">{{ doc.sender.email }}</div>
+            <div class="contact-info">
+              {% if doc.sender.contact %}<span>Tel: {{ doc.sender.contact }}</span>{% endif %}
+              {% if doc.sender.email %}<span>Email: {{ doc.sender.email }}</span>{% endif %}
+            </div>
           </div>
+
           <div class="party">
-            <div class="label">Bill To</div>
+            <div class="party-header">
+              <span class="label">Bill To</span>
+            </div>
             <div class="name">{{ doc.recipient.name }}</div>
             <div class="address">{{ doc.recipient.address }}</div>
+            {% if doc.recipient_contact or doc.recipient_email %}
+            <div class="contact-info">
+              {% if doc.recipient_contact %}<span>Attn / Tel: {{ doc.recipient_contact }}</span>{% endif %}
+              {% if doc.recipient_email %}<span>Email: {{ doc.recipient_email }}</span>{% endif %}
+            </div>
+            {% endif %}
           </div>
         </div>
 
+        <!-- SUBJECT / PROJECT CALLOUT -->
         <div class="intro-message">
-          <p>Dear Sir/Ma'am,</p>
-          <p>
-            We are pleased to submit herewith our proposal for the {{
-            doc.project.title }}.
-          </p>
+          <div class="intro-label">Project / Engagement Subject</div>
+          <div class="intro-title">{{ doc.project.title }}</div>
         </div>
 
+        <!-- LINE ITEMS TABLE -->
         <div class="table-wrap">
           <table class="items">
             <thead>
               <tr>
-                <th>Description</th>
-                <th class="center">Qty</th>
+                <th style="width: 75%;">Item & Scope Description</th>
+                <th class="center" style="width: 25%;">Quantity / Unit</th>
               </tr>
             </thead>
             <tbody>
               <!-- SECTION 1: MAIN MATERIALS -->
+              {% if doc.main_materials and doc.main_materials.length > 0 %}
               <tr class="section-header-row">
-                <td colspan="2">Main Materials</td>
+                <td colspan="2">
+                  <span class="section-tag">Main Materials</span>
+                </td>
               </tr>
               {% for item in doc.main_materials %}
               <tr>
@@ -75,14 +103,20 @@
                 <td class="center">{{ item.quantity if item.quantity else '—' }}</td>
               </tr>
               {% endfor %}
+              {% if doc.main_materials_total %}
               <tr class="section-subtotal-row">
-                <td class="subtotal-label">Subtotal — Main Materials</td>
-                <td class="num">PHP {{ "{:,.2f}".format(doc.main_materials_total) }}</td>
+                <td class="subtotal-label">Subtotal &mdash; Main Materials</td>
+                <td class="num">PHP {{ doc.main_materials_total | formatCurrency }}</td>
               </tr>
+              {% endif %}
+              {% endif %}
 
               <!-- SECTION 2: LABOR & OTHER MATERIALS -->
+              {% if doc.labor_and_other and doc.labor_and_other.length > 0 %}
               <tr class="section-header-row">
-                <td colspan="2">Labor & Other Materials</td>
+                <td colspan="2">
+                  <span class="section-tag">Labor & Installation Services</span>
+                </td>
               </tr>
               {% for item in doc.labor_and_other %}
               <tr>
@@ -90,57 +124,93 @@
                 <td class="center">{{ item.quantity if item.quantity else '—' }}</td>
               </tr>
               {% endfor %}
+              {% if doc.labor_other_total %}
               <tr class="section-subtotal-row">
-                <td class="subtotal-label">Subtotal — Labor & Other Materials</td>
-                <td class="num">PHP {{ "{:,.2f}".format(doc.labor_other_total) }}</td>
+                <td class="subtotal-label">Subtotal &mdash; Labor & Services</td>
+                <td class="num">PHP {{ doc.labor_other_total | formatCurrency }}</td>
               </tr>
+              {% endif %}
+              {% endif %}
             </tbody>
           </table>
         </div>
 
-        <div class="totals">
-          <div class="total-badge">
-            <span class="label">Total Amount Due (PHP)</span>
-            <span class="amount">{{ "{:,.2f}".format(doc.total) }}</span>
+        <!-- TOTALS SUMMARY CARD -->
+        <div class="summary-container">
+          <div class="summary-card">
+            {% if doc.main_materials_total %}
+            <div class="summary-row">
+              <span class="label">Materials Total</span>
+              <span class="val">PHP {{ doc.main_materials_total | formatCurrency }}</span>
+            </div>
+            {% endif %}
+            {% if doc.labor_other_total %}
+            <div class="summary-row">
+              <span class="label">Labor & Services Total</span>
+              <span class="val">PHP {{ doc.labor_other_total | formatCurrency }}</span>
+            </div>
+            {% endif %}
+            {% if doc.tax %}
+            <div class="summary-row">
+              <span class="label">Tax / VAT</span>
+              <span class="val">PHP {{ doc.tax | formatCurrency }}</span>
+            </div>
+            {% endif %}
+            {% if doc.discount %}
+            <div class="summary-row">
+              <span class="label">Discount</span>
+              <span class="val" style="color: #059669;">-PHP {{ doc.discount | formatCurrency }}</span>
+            </div>
+            {% endif %}
+            <div class="summary-grand-total">
+              <span class="label">Total Amount Due</span>
+              <span class="amount">PHP {{ doc.total | formatCurrency }}</span>
+            </div>
           </div>
         </div>
 
-        <div class="scope-section">
-          <div class="section-title">Scope of Work and Conditions</div>
+        <!-- DETAILS GRID: Scope & Terms -->
+        <div class="details-grid">
+          <div class="scope-section">
+            <div class="section-title">Scope of Work</div>
+            <ul class="scope-list">
+              <li>Site design and comprehensive technical assessment</li>
+              <li>Delivery and staging of equipment & materials</li>
+              <li>Installation of stainless tube & high-voltage wiring</li>
+              <li>Termination, grounding system calibration & testing</li>
+              <li>Basic troubleshooting & system operation training</li>
+            </ul>
 
-          <ul class="scope-list">
-            <li>Site design and assessment</li>
-            <li>Delivery of equipment and materials</li>
-            <li>Installation of stainless tube</li>
-            <li>Wiring of stainless wire and high voltage cable</li>
-            <li>Termination and testing</li>
-            <li>
-              Provide basic troubleshooting and system operation training to
-              the client
-            </li>
-            <li>
-              Chipping works for embedded pipe (from perimeter up to
-              energizer control)
-            </li>
-          </ul>
-
-          <div class="scope-notes">
-            <p>*Installation duration is between <strong>1–3 days</strong>.</p>
-            <p>*1-year parts and labor warranty.</p>
+            <div class="scope-notes">
+              <p>* Typical installation duration: <strong>1&ndash;3 business days</strong>.</p>
+              <p>* Covered by <strong>1-year parts and labor warranty</strong>.</p>
+            </div>
           </div>
 
-          <div class="terms">
-            <span class="label">Terms of Payment:</span>
-            <span class="value">Full payment upon installation</span>
+          <div class="terms-card">
+            <div class="term-item">
+              <span class="term-label">Terms of Payment</span>
+              <p class="term-val">Full settlement upon completion of system installation and testing sign-off.</p>
+            </div>
+            <div class="term-item">
+              <span class="term-label">Remittance Reference</span>
+              <p class="term-val">Please cite Invoice #{{ doc.document_id }} with all payment transfers.</p>
+            </div>
+            {% if doc.notes %}
+            <div class="term-item">
+              <span class="term-label">Special Notes</span>
+              <p class="term-val">{{ doc.notes }}</p>
+            </div>
+            {% endif %}
           </div>
         </div>
       </div>
 
+      <!-- FOOTER -->
       <footer class="footer">
         <div class="tagline">SEIA &mdash; Security System Services</div>
         <div class="note">
-          Thank you for your business. Please remit payment by the due date
-          indicated on this invoice.
+          Thank you for choosing SEIA. For inquiries regarding this invoice, please contact {{ doc.sender.email or doc.sender.contact }}.
         </div>
       </footer>
     </div>

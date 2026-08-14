@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Official Receipt #{{ doc.document_id }}</title>
+    <link rel="stylesheet" href="/styles.css" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="invoice">
+      <!-- HEADER: Brand + Prominent Document Title & Metadata -->
+      <header class="header">
+        <div class="brand">
+          <img src="/logo/official_SEIA_LOGO.svg" alt="SEIA Logo" class="logo" />
+          <span class="company-sub">Security System Services</span>
+        </div>
+
+        <div class="doc-meta">
+          <div class="doc-title-wrap">
+            <h1 class="doc-type-title">Official Receipt</h1>
+            <div class="doc-type-subtitle">Payment Acknowledgment</div>
+          </div>
+          <div class="meta-grid">
+            <div class="meta-row">
+              <span class="label">Receipt No:</span>
+              <span class="value">#{{ doc.document_id }}</span>
+            </div>
+            <div class="meta-row">
+              <span class="label">Payment Date:</span>
+              <span class="value">{{ doc.date_issued }}</span>
+            </div>
+            <div class="meta-row">
+              <span class="label">Status:</span>
+              <span class="value">
+                <span class="status-badge">Paid in Full</span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div class="content">
+        <!-- PARTIES: Sender & Client -->
+        <div class="parties">
+          <div class="party">
+            <div class="party-header">
+              <span class="label">Received By</span>
+            </div>
+            <div class="name">{{ doc.sender.name }}</div>
+            <div class="address">{{ doc.sender.address }}</div>
+            <div class="contact-info">
+              {% if doc.sender.contact %}<span>Tel: {{ doc.sender.contact }}</span>{% endif %}
+              {% if doc.sender.email %}<span>Email: {{ doc.sender.email }}</span>{% endif %}
+            </div>
+          </div>
+
+          <div class="party">
+            <div class="party-header">
+              <span class="label">Received From (Payor)</span>
+            </div>
+            <div class="name">{{ doc.recipient.name }}</div>
+            <div class="address">{{ doc.recipient.address }}</div>
+            <div class="contact-info">
+              {% if doc.recipient_contact %}<span>Contact: {{ doc.recipient_contact }}</span>{% endif %}
+              {% if doc.recipient_email %}<span>Email: {{ doc.recipient_email }}</span>{% endif %}
+            </div>
+          </div>
+        </div>
+
+        <!-- SUBJECT / PROJECT CALLOUT -->
+        <div class="intro-message">
+          <div class="intro-label">Payment For Project</div>
+          <div class="intro-title">{{ doc.project.title }}</div>
+        </div>
+
+        <!-- LINE ITEMS TABLE -->
+        <div class="table-wrap">
+          <table class="items">
+            <thead>
+              <tr>
+                <th style="width: 75%;">Settled Items & Description</th>
+                <th class="center" style="width: 25%;">Status / Quantity</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% if doc.main_materials and doc.main_materials.length > 0 %}
+              <tr class="section-header-row">
+                <td colspan="2">
+                  <span class="section-tag">Materials Settlement</span>
+                </td>
+              </tr>
+              {% for item in doc.main_materials %}
+              <tr>
+                <td>{{ item.description }}</td>
+                <td class="center">{{ item.quantity if item.quantity else 'Completed' }}</td>
+              </tr>
+              {% endfor %}
+              {% if doc.main_materials_total %}
+              <tr class="section-subtotal-row">
+                <td class="subtotal-label">Materials Paid</td>
+                <td class="num">PHP {{ doc.main_materials_total | formatCurrency }}</td>
+              </tr>
+              {% endif %}
+              {% endif %}
+
+              {% if doc.labor_and_other and doc.labor_and_other.length > 0 %}
+              <tr class="section-header-row">
+                <td colspan="2">
+                  <span class="section-tag">Labor & Service Settlement</span>
+                </td>
+              </tr>
+              {% for item in doc.labor_and_other %}
+              <tr>
+                <td>{{ item.description }}</td>
+                <td class="center">{{ item.quantity if item.quantity else 'Completed' }}</td>
+              </tr>
+              {% endfor %}
+              {% if doc.labor_other_total %}
+              <tr class="section-subtotal-row">
+                <td class="subtotal-label">Labor Paid</td>
+                <td class="num">PHP {{ doc.labor_other_total | formatCurrency }}</td>
+              </tr>
+              {% endif %}
+              {% endif %}
+            </tbody>
+          </table>
+        </div>
+
+        <!-- TOTAL RECEIVED SUMMARY CARD -->
+        <div class="summary-container">
+          <div class="summary-card">
+            <div class="summary-row">
+              <span class="label">Payment Status</span>
+              <span class="val" style="color: #059669; font-weight: 700;">CLEARED &bull; FULL</span>
+            </div>
+            <div class="summary-grand-total">
+              <span class="label">Total Amount Received</span>
+              <span class="amount">PHP {{ doc.total | formatCurrency }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- DETAILS GRID: Acknowledgment & Warranty -->
+        <div class="details-grid">
+          <div class="scope-section">
+            <div class="section-title">Settlement Details</div>
+            <ul class="scope-list">
+              <li>Full acknowledgment of payment received for equipment and services</li>
+              <li>Official release of installed hardware and warranty activation</li>
+              <li>System turnover and credentials delivered to authorized personnel</li>
+              <li>24/7 technical on-call emergency line registered</li>
+            </ul>
+
+            <div class="scope-notes">
+              <p>* Retain this official receipt for corporate tax and warranty verification.</p>
+            </div>
+          </div>
+
+          <div class="terms-card">
+            <div class="term-item">
+              <span class="term-label">Transaction Notes</span>
+              <p class="term-val">{{ doc.notes or 'Payment verified through corporate banking settlement.' }}</p>
+            </div>
+            <div class="term-item">
+              <span class="term-label">Warranty Activation</span>
+              <p class="term-val">Active: 1-Year Comprehensive On-Site Warranty.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FOOTER -->
+      <footer class="footer">
+        <div class="tagline">SEIA &mdash; Security System Services</div>
+        <div class="note">
+          This serves as the official digital acknowledgment of payment. Thank you for your continued partnership.
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>
