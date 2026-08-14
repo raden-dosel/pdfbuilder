@@ -14,29 +14,13 @@ app = FastAPI(
     openapi_url=f"{settings.API_V1_STR}/openapi.json",
 )
 
-# CORS origins are sourced from settings so they can differ per
-# environment (permissive in dev, locked down in production).
-# Coerce CORS origins into a list if settings provides a string
-cors_origins = settings.CORS_ORIGINS
-if isinstance(cors_origins, str):
-    cors_str = cors_origins.strip()
-    if cors_str.startswith("["):
-        import json
-        try:
-            cors_list = json.loads(cors_str)
-        except Exception:
-            cors_list = [item.strip() for item in cors_str.strip("[]").split(",") if item.strip()]
-    else:
-        cors_list = [item.strip() for item in cors_str.split(",") if item.strip()]
-else:
-    cors_list = cors_origins
-
+# CORS Setup
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=cors_list,
+    allow_origins=settings.cors_origins_list,
     allow_credentials=True,
     allow_methods=["*"],
-    allow_headers=["*"],    
+    allow_headers=["*"],  # Allows X-API-Key, Content-Type, Authorization, etc.
 )
 
 app.include_router(pdf_router)
@@ -45,5 +29,3 @@ app.include_router(pdf_router)
 @app.get("/health", tags=["System"])
 async def health_check():
     return {"status": "healthy", "environment": settings.ENVIRONMENT}
-
-

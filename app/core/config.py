@@ -1,11 +1,6 @@
-from pydantic_settings import BaseSettings, SettingsConfigDict
-from pydantic import field_validator
 from typing import List
-import os
-from dotenv import load_dotenv
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
-load_dotenv()
-api_key = os.getenv("API_KEY")
 
 class Settings(BaseSettings):
     # Application Details
@@ -18,21 +13,41 @@ class Settings(BaseSettings):
     DEBUG: bool = True
     
     # Security & Network Settings
-    # In production, set this env var to a JSON array or comma-separated list
-    # We keep it as a raw string to avoid Pydantic's strict JSON decoding on env vars
+    # Supply as comma-separated origins: "https://my-app.vercel.app,http://localhost:3000"
     CORS_ORIGINS: str = "*"
     
-    # API Key for authentication (required for all PDF generation endpoints)
-    # Set via environment variable API_KEY in production
-    API_KEY: str = api_key
+    # API Key for authentication
+    API_KEY: str = "default_dev_key"
     API_KEY_HEADER: str = "X-API-Key"
     
-    # Tell Pydantic to look for a local .env file first
+    @property
+    def cors_origins_list(self) -> List[str]:
+        """Parse CORS_ORIGINS string into a list of clean origin strings."""
+        if not self.CORS_ORIGINS:
+            return ["*"]
+        
+        raw = self.CORS_ORIGINS.strip()
+        
+        # Handle JSON array strings like '["https://site.com"]'
+        if raw.startswith("["):
+            import json
+            try:
+                parsed = json.loads(raw)
+                if isinstance(parsed, list):
+                    return [str(item).strip() for item in parsed if item]
+            except Exception:
+                pass
+        
+        # Handle comma-separated strings or single domains
+        return [origin.strip().strip('"').strip("'") for origin in raw.split(",") if origin.strip()]
+
+    # Pydantic native environment variable configuration
     model_config = SettingsConfigDict(
         env_file=".env", 
         env_file_encoding="utf-8",
-        case_sensitive=True
+        case_sensitive=True,
+        extra="ignore"
     )
 
-# Instantiate a global settings object to import across your app
+
 settings = Settings()
