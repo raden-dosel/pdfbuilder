@@ -14,7 +14,7 @@ class Settings(BaseSettings):
     
     # Security & Network Settings
     # Supply as comma-separated origins: "https://my-app.vercel.app,http://localhost:3000"
-    CORS_ORIGINS: str = "*"
+    CORS_ORIGINS: str = "https://billing-clientside.onrender.com"
     
     # API Key for authentication
     API_KEY: str = "default_dev_key"
